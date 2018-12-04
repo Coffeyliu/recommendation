@@ -6,7 +6,7 @@ from random import shuffle
 import operator
 import math
 
-def make_train_test(user_movie_table, user_num):
+def train_test_seen_unseen(user_movie_table, user_num):
     mu = user_movie_table.T
     user1 = mu[user_num]
     
