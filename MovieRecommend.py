@@ -7,6 +7,25 @@ import operator
 import math
 
 def train_test_seen_unseen(user_movie_table, user_num):
+    """created train, test, seen, unseen index lists.
+    Parameters
+    --------------
+    user_movie_table : pd.DataFrame
+        table with user_movie rating info.
+    user_num : Int
+        user_num start from 1.
+
+    Returns
+    --------------
+    train_index : list
+        a list with the movie watched and rated by user_i. But without info which put in test_index.
+    test_index : list
+        a list has the true value but was hided.
+    watched_index : list
+        a list of index of watched movies.
+    unseen_index : list
+        a list of index of unseen movies.
+    """
     mu = user_movie_table.T
     user1 = mu[user_num]
     
@@ -31,9 +50,9 @@ def weight_calculator(user_movie_table, index1, index2):
     Parameters
     --------------
     user_movie_table : pd.DataFrame
-        user_movie rating info
+        user_movie rating info.
     index1, index2 : Integer
-        pointer in table
+        pointer in table. Index for users.
     """
     mu = user_movie_table.T
     user1 = mu[index1]
@@ -62,6 +81,23 @@ def weight_calculator(user_movie_table, index1, index2):
 
 
 def predict_ur_score(user_movie_table, user_num, movie_index, k_nearest):
+    """Using k_nearest neighbor to predict one user score towards a specific movie.
+    Parameters
+    ------------
+    user_movie_table : pd.DataFrame
+        table with user_movie rating info.
+    user_num : Int
+        user_num start from 1.
+    movie_index : Int
+        index of movie. Starts from 0.
+    k_nearest : Int
+        number of nearest users
+    
+    Returns
+    ------------
+    score_1_3 : Int
+        ex: weight between user1 and user3
+    """
     
     mu = user_movie_table.T
 
@@ -104,13 +140,32 @@ def predict_ur_score(user_movie_table, user_num, movie_index, k_nearest):
     
     user1_watched = mu[user_num].dropna()
     x1_mean = user1_watched.mean()
-    socre_1_3 = x1_mean + numerator/denominator
+    score_1_3 = x1_mean + numerator/denominator
     
-    return socre_1_3
+    return score_1_3
 
 
 
 def pred_score_for_user_i(user_movie_table, user_num, unseen_index, k_nearest):
+    """predict the score for user_i to a series of his unseen movies.
+    Parameters
+    ------------
+    user_movie_table : pd.DataFrame
+        table with user_movie rating info.
+    user_num : Int
+        user_num start from 1.
+    unseen_index : list
+        a list of index of unseen movies.
+    k_nearest : Int
+        number of nearest users
+
+    Returns
+    -------------
+    recommend_movieId : list
+        a descent sorted list of movieId to watch
+    recommend_movie_score : list
+        a descent sorted list of predicted score user_i will give
+    """
     
     movie_pred_score = {}
     for i in range(len(unseen_index)):
@@ -128,6 +183,9 @@ def pred_score_for_user_i(user_movie_table, user_num, unseen_index, k_nearest):
 
 
 def raw_to_pred(x):
+    """round number in half
+    ex: 3.76 will be rounded to 4, and 3.744 will be rounded to 3.5.
+    """
     middle = (math.floor(x) + math.ceil(x))/2
     
     if x < (middle - 0.25):
