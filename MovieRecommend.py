@@ -59,7 +59,9 @@ def weight_calculator(user_movie_table, index1, index2):
 
 
 
-def predict_ur_score(user_movie_table, user_num, movie_index):
+
+
+def predict_ur_score(user_movie_table, user_num, movie_index, k_nearest):
     
     mu = user_movie_table.T
 
@@ -72,11 +74,20 @@ def predict_ur_score(user_movie_table, user_num, movie_index):
     users_movie3 = list(pd.DataFrame(movie3_rating.reset_index())['userId'])
     movie3_rating_score = list(pd.DataFrame(movie3_rating.reset_index())['rating'][movieId[movie_index]])
     
-    #3.calculate predict score for user1 of movie3
-    numerator_list = []
-    denominator_list = []
+    #3.find K nearest users
+    weight_1_users = {}
     for i in range(len(users_movie3)):
         weight_1_i = weight_calculator(user_movie_table, user_num, users_movie3[i])
+        weight_1_users[users_movie3[i]] = weight_1_i
+    sorted_weight_1_users = sorted(weight_1_users.items(), key=operator.itemgetter(1), reverse=True)
+    sorted_k_nearest_users = list(item[0] for item in sorted_weight_1_users)[:k_nearest]
+    sorted_k_nearest_weights = list(item[1] for item in sorted_weight_1_users)[:k_nearest]
+    
+    #4.calculate predict score for user1 of movie3
+    numerator_list = []
+    denominator_list = []
+    for i in range(len(sorted_k_nearest_users)):
+        weight_1_i = sorted_k_nearest_weights[i]
 
         useri_watched = mu[users_movie3[i]].dropna()
         xi_mean = useri_watched.mean()
@@ -99,11 +110,11 @@ def predict_ur_score(user_movie_table, user_num, movie_index):
 
 
 
-def pred_score_for_user_i(user_movie_table, user_num, unseen_index):
+def pred_score_for_user_i(user_movie_table, user_num, unseen_index, k_nearest):
     
     movie_pred_score = {}
     for i in range(len(unseen_index)):
-        score_i = predict_ur_score(user_movie_table, 1, unseen_index[i])
+        score_i = predict_ur_score(user_movie_table, 1, unseen_index[i], k_nearest)
         movie_pred_score[unseen_index[i]] = score_i
         sorted_movie_pred_score = sorted(movie_pred_score.items(), key=operator.itemgetter(1), reverse=True)
     
