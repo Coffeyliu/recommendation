@@ -91,7 +91,7 @@ def weight_calculator(table, index1, index2):
         return weight_between_two_users
 
 
-def pred_specific_movie_score(user_movie_table, user_num, movie_num, k_nearest=20):
+def pred_specific_movie_score(user_movie_table, user_num, movie_index, k_nearest=20):
     """Using k_nearest neighbor to predict one user score towards a specific movie.
     
     Parameters
@@ -100,8 +100,8 @@ def pred_specific_movie_score(user_movie_table, user_num, movie_num, k_nearest=2
         table with user_movie rating info.
     user_num : Int
         user_num starts from 1.
-    movie_num : Int
-        movie_num starts from 1.
+    movie_index : Int
+        movie_index starts from 0.(but the movie_num starts from 1
     k_nearest : Int
         number of nearest users
     
@@ -110,8 +110,7 @@ def pred_specific_movie_score(user_movie_table, user_num, movie_num, k_nearest=2
     score_1_3 : Int
         ex: weight between user1 and user3
     """
-    
-    movie_index = movie_num - 1
+   
     mu = user_movie_table.T
 
     #1.find people who rates movie3
