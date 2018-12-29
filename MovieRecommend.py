@@ -1,4 +1,4 @@
-
+#THIS .PY NOW INCLUDE CALCULATION FOR BOTH UserUser and ItemItem CF
 
 import pandas as pd
 import numpy as np
@@ -45,16 +45,26 @@ def train_test_seen_unseen(user_movie_table, user_num):
     
 
 
-def weight_calculator(user_movie_table, index1, index2):
-    """find pearson corr between two users
+def weight_calculator(table, index1, index2):
+    """find pearson corr between two users/items.
+    
     Parameters
     --------------
     user_movie_table : pd.DataFrame
         user_movie rating info.
     index1, index2 : Integer
         pointer in table. Index for users.
+    
+    Note
+    ---------------
+    if input table is user_movie_table, the function will calculate USERs' correlation scores;
+    if input table is movie_user_table, the function will calculate ITEMs' correlation scores.
+       
     """
+    user_movie_table = table 
+    
     mu = user_movie_table.T
+    
     user1 = mu[index1]
     user2 = mu[index2]
     common = mu[[index1,index2]].dropna()
