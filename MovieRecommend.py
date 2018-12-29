@@ -155,27 +155,29 @@ def pred_specific_movie_score(user_movie_table, user_num, movie_num, k_nearest=2
 
 
 
-def pred_series_movie_scores(user_movie_table, user_num, unseen_index, k_nearest):
-    
+def pred_series_movie_scores(table, user_num, unseen_index, k_nearest=20):
+   
     """predict the score for user_i to a series of his unseen movies.
     Parameters
     ------------
-    user_movie_table : pd.DataFrame
-        table with user_movie rating info.
+    table : pd.DataFrame
+        if input table is user_movie_table, the CF is for User-User;
+        
     user_num : Int
         user_num start from 1.
     unseen_index : list
         a list of index of unseen movies.
     k_nearest : Int
-        number of nearest users
+        number of nearest users. Default=20
 
     Returns
     -------------
     recommend_movieId : list
         a descent sorted list of movieId to watch
     recommend_movie_score : list
-        a descent sorted list of predicted score user_i will give
+        a descent sorted list of predicted score user_i will give     
     """
+    user_movie_table = table
     
     movie_pred_score = {}
     for i in range(len(unseen_index)):
