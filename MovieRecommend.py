@@ -155,7 +155,8 @@ def pred_specific_movie_score(user_movie_table, user_num, movie_num, k_nearest=2
 
 
 
-def pred_score_for_user_i(user_movie_table, user_num, unseen_index, k_nearest):
+def pred_series_movie_scores(user_movie_table, user_num, unseen_index, k_nearest):
+    
     """predict the score for user_i to a series of his unseen movies.
     Parameters
     ------------
