@@ -25,6 +25,10 @@ def train_test_seen_unseen(user_movie_table, user_num):
         a list of index of watched movies.
     unseen_index : list
         a list of index of unseen movies.
+        
+    Note
+    ---------------
+    train_index and test_index are all from watched_index
     """
     mu = user_movie_table.T
     user1 = mu[user_num]
