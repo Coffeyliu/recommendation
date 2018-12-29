@@ -87,8 +87,9 @@ def weight_calculator(table, index1, index2):
         return weight_between_two_users
 
 
-def predict_ur_score(user_movie_table, user_num, movie_num, k_nearest=20):
+def pred_specific_movie_score(user_movie_table, user_num, movie_num, k_nearest=20):
     """Using k_nearest neighbor to predict one user score towards a specific movie.
+    
     Parameters
     ------------
     user_movie_table : pd.DataFrame
@@ -177,7 +178,7 @@ def pred_score_for_user_i(user_movie_table, user_num, unseen_index, k_nearest):
     
     movie_pred_score = {}
     for i in range(len(unseen_index)):
-        score_i = predict_ur_score(user_movie_table, 1, unseen_index[i], k_nearest)
+        score_i = pred_specific_movie_score(user_movie_table, 1, unseen_index[i], k_nearest)
         movie_pred_score[unseen_index[i]] = score_i
         sorted_movie_pred_score = sorted(movie_pred_score.items(), key=operator.itemgetter(1), reverse=True)
     
